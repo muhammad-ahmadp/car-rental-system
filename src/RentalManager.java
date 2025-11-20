@@ -14,12 +14,12 @@ public class RentalManager {
     public void addCar(Car car) {
         for (Car c : cars) {
             if (c.getCarId().equals(car.getCarId())) {
-                System.out.println("❌ Car ID already exists!");
+                System.out.println("Car ID already exists!");
                 return;
             }
         }
         cars.add(car);
-        System.out.println("✅ Car added successfully!");
+        System.out.println("Car added successfully!");
     }
 
     // Add new customer
