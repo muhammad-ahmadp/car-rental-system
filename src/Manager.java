@@ -22,7 +22,7 @@ public class Manager {
             try {
                 choice = Integer.parseInt(sc.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("❌ Invalid choice! Enter a number from 1 to 8.");
+                System.out.println("Invalid choice! Enter a number from 1 to 8.");
                 continue;
             }
 
@@ -40,7 +40,7 @@ public class Manager {
 
                     Car car = new Car(carId, model, brand, pricePerDay, true);
                     rentalManager.addCar(car);
-                    System.out.println("✅ Car added successfully!");
+                    System.out.println("Car added successfully!");
                 }
                 case 2 -> {
                     // Add Customer
@@ -53,7 +53,7 @@ public class Manager {
 
                     Customer customer = new Customer(customerId, name, phone);
                     rentalManager.addCustomer(customer);
-                    System.out.println("✅ Customer added successfully!");
+                    System.out.println("Customer added successfully!");
                 }
                 case 3 -> {
                     // Rent a Car
@@ -84,16 +84,16 @@ public class Manager {
                     }
 
                     if (cust == null) {
-                        System.out.println("❌ Customer not found!");
+                        System.out.println("Customer not found!");
                     } else if (car == null) {
-                        System.out.println("❌ Car not found!");
+                        System.out.println("Car not found!");
                     } else if (!car.isAvailable()) {
-                        System.out.println("❌ Car is not available!");
+                        System.out.println("Car is not available!");
                     } else {
                         car.rentCar();
                         Rental rental = new Rental(rentalId, days, car, cust);
                         rentalManager.addRental(rental);
-                        System.out.println("✅ Rental completed successfully!");
+                        System.out.println("Rental completed successfully!");
                         System.out.println(rental);
                     }
                 }
@@ -105,12 +105,12 @@ public class Manager {
                     for (Rental r : rentalManager.getRentals()) {
                         if (r.getRentalId().equals(rentalId)) {
                             r.getCar().returnCar();
-                            System.out.println("✅ Car returned successfully!");
+                            System.out.println("Car returned successfully!");
                             found = true;
                             break;
                         }
                     }
-                    if (!found) System.out.println("❌ Rental ID not found!");
+                    if (!found) System.out.println("Rental ID not found!");
                 }
                 case 5 -> rentalManager.displayAllCars();
                 case 6 -> rentalManager.displayAllCustomers();
@@ -119,7 +119,7 @@ public class Manager {
                     exit = true;
                     System.out.println("Exiting... Thank you!");
                 }
-                default -> System.out.println("❌ Invalid choice! Enter 1-8.");
+                default -> System.out.println("Invalid choice! Enter 1-8.");
             }
         }
 
