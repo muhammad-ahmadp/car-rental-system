@@ -1,199 +1,120 @@
-# 🚗 Car Rental Management System
+# Car Rental Management System
 
-A comprehensive console-based car rental management system built with Java, featuring full rental workflow, customer management, and automated cost calculation.
+A comprehensive, console-based application developed in Java to manage the full lifecycle of a car rental business, from vehicle and customer registration to rental transactions and automated billing. This project highlights the implementation of complex business logic and state management within an Object-Oriented framework.
 
 [![Java](https://img.shields.io/badge/Java-11+-orange.svg)](https://www.java.com/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## ✨ Features
+---
 
-- 🚗 **Car Management** - Add and track rental vehicles
-- 👤 **Customer Registration** - Manage customer information
-- 📝 **Rental Operations** - Complete rent and return workflow
-- 💰 **Automated Billing** - Automatic cost calculation based on rental duration
-- ✅ **Input Validation** - Comprehensive error checking and data validation
-- 🔄 **Availability Tracking** - Real-time car availability status
-- 🎨 **Interactive CLI** - User-friendly command-line interface
-- 🛡️ **Duplicate Prevention** - Prevents duplicate car IDs
+## 1. Overview
 
-## 🚀 Quick Start
+The Car Rental Management System is designed to simulate the core operations of a rental agency. It focuses on maintaining data integrity, tracking the availability of assets, and accurately calculating transaction costs based on business rules.
 
-### Prerequisites
-- Java Development Kit (JDK) 8 or higher
-- Any IDE (IntelliJ IDEA, Eclipse, VS Code) or terminal
+### Core Features
 
-### Installation
+*   **Asset Management:** Add and track rental vehicles, including model, brand, and daily price.
+*   **Customer Management:** Register and manage customer information.
+*   **Rental Workflow:** Complete end-to-end process for renting and returning a car.
+*   **Automated Billing:** Calculates the total rental cost based on the daily rate and rental duration.
+*   **State Management:** Real-time tracking of car availability to prevent double-booking.
+*   **Data Integrity:** Comprehensive input validation and prevention of duplicate car IDs.
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/muhammad-ahmadp/car-rental-system.git
-cd car-rental-system
-```
+---
 
-2. **Compile all files**
-```bash
-javac *.java
-```
+## 2. Technical Architecture
 
-3. **Run the application**
-```bash
-java Manager
-```
+The system is modularly designed with distinct classes handling the core entities, transactions, and business logic.
 
-## 📖 Usage
-
-### Main Menu
-```
-===== Car Rental System =====
-1. Add Car
-2. Add Customer
-3. Rent a Car
-4. Return a Car
-5. Show All Cars
-6. Show All Customers
-7. Show All Rentals
-8. Exit
-```
-
-### Example Workflow
-
-#### 1. Add a Car
-```
-Enter your choice: 1
-Enter Car ID: C001
-Enter Model: Civic
-Enter Brand: Honda
-Enter Rental Price per Day: 50
-✅ Car added successfully!
-```
-
-#### 2. Register a Customer
-```
-Enter your choice: 2
-Enter Customer ID: CUST001
-Enter Name: Ahmed Ali
-Enter Phone Number: 03001234567
-✅ Customer added successfully!
-```
-
-#### 3. Rent a Car
-```
-Enter your choice: 3
-Enter Rental ID: R001
-Enter Customer ID: CUST001
-Enter Car ID: C001
-Enter Days: 3
-✅ Rental completed successfully!
-
-Rental ID: R001
-Customer: Ahmed Ali
-Car: Honda (Civic)
-Days: 3
-Total Cost: 150.00
-```
-
-#### 4. Return a Car
-```
-Enter your choice: 4
-Enter Rental ID to return: R001
-✅ Car returned successfully!
-```
-
-## 🏗️ Project Structure
+### Project Structure
 
 ```
 car-rental-system/
 │
-├── Car.java              # Car entity with rental operations
+├── Car.java              # Car entity with rental state
 ├── Customer.java         # Customer entity
-├── Rental.java          # Rental transaction with cost calculation
-├── RentalManager.java   # Business logic and data management
-├── Manager.java         # Main entry point with CLI interface
-└── README.md            # This file
+├── Rental.java           # Rental transaction and cost calculation
+├── RentalManager.java    # Business logic and data management
+└── Manager.java          # Main entry point with CLI interface
 ```
 
-## 🔧 Technical Details
+### Key Classes and Responsibilities
 
-### Key Classes
+| Class | Responsibility | Key Concepts Demonstrated |
+| :--- | :--- | :--- |
+| `Car.java` | Represents a rental asset and manages its availability state. | Encapsulation, State Management, Data Validation. |
+| `Customer.java` | Manages customer data. | Encapsulation, Input Validation. |
+| `Rental.java` | Models the transaction, linking `Car` and `Customer`. | Business Logic Implementation, Automated Calculation. |
+| `RentalManager.java` | Central repository for all entities and core business operations. | Collection Management (`ArrayList`), Search Logic, Duplicate Prevention. |
 
-#### `Car`
-Represents a rental vehicle with:
-- Unique car ID, model, and brand
-- Daily rental price
-- Availability status
-- Rent/return operations with state validation
+---
 
-#### `Customer`
-Manages customer information:
-- Customer ID and name
-- Contact information
-- Input validation
+## 3. Design Decisions
 
-#### `Rental`
-Handles rental transactions:
-- Links customer with rented car
-- Tracks rental duration
-- Automatically calculates total cost
-- Formatted receipt generation
+The design prioritizes robust state management and accurate financial transactions, which are critical for a rental business.
 
-#### `RentalManager`
-Central management system:
-- Maintains all cars, customers, and rentals
-- Duplicate prevention for car IDs
-- Search and display operations
-- Data access methods
+*   **State Management:** The `Car` class includes an `isAvailable` flag, and the `rentCar()` method explicitly checks this state before proceeding, preventing logical errors like renting an already-rented vehicle.
+*   **Business Logic Encapsulation:** The cost calculation logic is encapsulated within the `Rental` class, ensuring that the billing process is consistent and decoupled from the main management logic.
+*   **Data Integrity:** Duplicate prevention is implemented for car IDs in the `RentalManager`, a necessary feature for maintaining a reliable asset inventory.
+*   **Exception Handling:** The system uses exceptions (e.g., `IllegalStateException`) to handle invalid state transitions (like trying to rent an unavailable car), promoting clean error handling.
 
-#### `Manager`
-User interface:
-- Interactive menu system
-- Input handling and validation
-- Exception handling
-- User-friendly error messages
+### Code Example: State Management and Validation
 
-## 🎯 Key Features Explained
-
-### 1. Automated Cost Calculation
-```java
-public double totalCost() {
-    return days * car.getRentalPricePerDay();
-}
-```
-System automatically calculates rental cost based on duration.
-
-### 2. State Management
 ```java
 public void rentCar() {
+    // Prevents double-booking and invalid state transitions
     if (!isAvailable) {
         throw new IllegalStateException("Car is already rented!");
     }
     this.isAvailable = false;
 }
-```
-Prevents double-booking and invalid state transitions.
 
-### 3. Duplicate Prevention
-```java
-for (Car c : cars) {
-    if (c.getCarId().equals(car.getCarId())) {
-        System.out.println("❌ Car ID already exists!");
-        return;
-    }
+public double totalCost() {
+    // Automated cost calculation
+    return days * car.getRentalPricePerDay();
 }
 ```
-Ensures data integrity by preventing duplicate entries.
 
-## 📊 Sample Output
+---
+
+## 4. How to Run
+
+### Prerequisites
+*   Java Development Kit (JDK) 8 or higher
+
+### Installation and Execution
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/muhammad-ahmadp/car-rental-system.git
+    cd car-rental-system
+    ```
+
+2.  **Compile all files:**
+    ```bash
+    javac *.java
+    ```
+
+3.  **Run the application:**
+    ```bash
+    java Manager
+    ```
+
+### Sample Workflow
 
 ```
-=== All Cars ===
-Car ID: C001
-Model: Civic
-Brand: Honda
-Rental Price/Day: 50
-Available: No
-------------------------------
+===== Car Rental System =====
+1. Add Car
+...
+3. Rent a Car
+...
+Enter your choice: 3
+Enter Rental ID: R001
+Enter Customer ID: CUST001
+Enter Car ID: C001
+Enter Days: 3
+Rental completed successfully!
 
-=== Rental Receipt ===
 Rental ID: R001
 Customer: Ahmed Ali
 Car: Honda (Civic)
@@ -201,81 +122,39 @@ Days: 3
 Total Cost: 150.00
 ```
 
-## 🛡️ Validation & Error Handling
+---
 
-### Input Validation
-- ✅ All fields validated for null/empty values
-- ✅ Numeric values checked for validity
-- ✅ Clear error messages for invalid inputs
-- ✅ Exception handling for user input
+## 5. Limitations and Future Enhancements
 
-### Business Logic Validation
-- ✅ Prevents renting unavailable cars
-- ✅ Checks for valid customer and car IDs
-- ✅ Validates rental duration (minimum 1 day)
-- ✅ Prevents duplicate car registrations
+### Known Limitations
 
-## ⚠️ Known Limitations
+*   **Persistence:** Data is stored in memory only and is lost upon application exit.
+*   **Interface:** Limited to a console-only interface.
+*   **Financial:** Lacks integration for payment processing and tax calculation.
 
-- 📝 In-memory storage only (data lost on exit)
-- 🔐 No authentication system
-- 💾 No database persistence
-- 📅 No due date tracking
-- 💳 No payment processing
-- 🌐 Console-only interface
+### What I'd Do Next
 
-## 🔮 Future Enhancements
-
-- [ ] Add database integration (MySQL/PostgreSQL)
-- [ ] Implement due date and late fee system
-- [ ] Add payment processing
-- [ ] Create GUI with JavaFX
-- [ ] Add search and filter functionality
-- [ ] Implement customer rental history
-- [ ] Add car maintenance tracking
-- [ ] Generate PDF receipts
-- [ ] Add email notifications
-- [ ] Implement multi-location support
-
-## 🎓 Learning Objectives
-
-This project demonstrates:
-- ✅ Object-Oriented Programming principles
-- ✅ Encapsulation and data validation
-- ✅ Business logic implementation
-- ✅ ArrayList usage and management
-- ✅ Exception handling
-- ✅ User interface design (CLI)
-- ✅ State management
-- ✅ Real-world problem solving
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👤 Author
-
-**[Muhammad Ahmad]**
-
-- GitHub: [muhammad-ahmadp](https://github.com/muhammad-ahmadp)
-- LinkedIn: [muhammad-ahmadcs](https://linkedin.com/in/muhammad-ahmadcs)
-- Email: muhammadahmadseng@gmail.com
-
-## 🙏 Acknowledgments
-
-- Built as a practical project to demonstrate Java fundamentals
-- Inspired by real-world car rental business operations
-- Thanks to the Java community for excellent documentation
-
-## 📧 Contact
-
-Questions or suggestions? Feel free to:
-- Open an issue
-- Submit a pull request
-- Contact me directly
+*   Implement **database persistence** (e.g., using JDBC) for permanent data storage.
+*   Develop a **Graphical User Interface (GUI)** using JavaFX or Swing.
+*   Add a **due date and late fee system** to enhance business logic.
+*   Implement **customer rental history** tracking and **car maintenance** tracking.
+*   Integrate **Unit Tests** to cover core business logic and state transitions.
 
 ---
 
-⭐ **If this project helped you learn, please give it a star!** ⭐
+## 6. Contact and License
 
-**Made with ❤️ and Java**
+### Author
+
+**Muhammad Ahmad**
+
+*   GitHub: [@muhammad-ahmadp](https://github.com/muhammad-ahmadp)
+*   LinkedIn: [muhammad-ahmadcs](https://linkedin.com/in/muhammad-ahmadcs)
+
+### License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+### Acknowledgments
+
+This project was built as a practical demonstration of Java fundamentals and the implementation of complex business rules in a real-world scenario.
